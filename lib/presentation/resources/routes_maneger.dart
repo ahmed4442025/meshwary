@@ -1,4 +1,5 @@
 import 'package:meshwary/presentation/Forgot_password/forgot_password_view.dart';
+import 'package:meshwary/presentation/choose_line_view/chose_line_view.dart';
 import 'package:meshwary/presentation/login/login_view.dart';
 import 'package:meshwary/presentation/main/main_view.dart';
 import 'package:meshwary/presentation/onboarding/onboarding.dart';
@@ -13,6 +14,7 @@ class Routes {
   static const String loginRout = "/login";
   static const String registerRout = "/register";
   static const String confirmPhoneRout = "/confirmPhone";
+  static const String choseLineRout = "/choseLine";
   static const String forgotPasswordRout = "/forgetPassword";
   static const String mainRout = "/main";
   static const String onBoardingRout = "/onBoarding";
@@ -35,6 +37,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.onBoardingRout:
         return MaterialPageRoute(builder: (_) => OnBoardingView());
+      case Routes.choseLineRout:
+        return MaterialPageRoute(builder: (_) => ChoseLineView());
       default:
         return _unDefinedRout();
     }

@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:meshwary/app/functions/cubits/fireAuth.dart';
 import 'package:meshwary/presentation/resources/app_constants.dart';
 import 'package:meshwary/presentation/resources/color_manager.dart';
 import 'package:meshwary/presentation/resources/image_assets.dart';
 import 'package:meshwary/presentation/resources/routes_maneger.dart';
 import 'package:flutter/material.dart';
+
+import '../../app/functions/shared/cache_manager.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
@@ -21,9 +24,10 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void _goNext() {
-    Navigator.pushReplacementNamed(context, Routes.loginRout);
+    String nextPage =
+        FireAuth.auth.currentUser == null ? Routes.loginRout : Routes.choseLineRout;
+    Navigator.pushReplacementNamed(context, nextPage);
   }
-
 
   @override
   void initState() {

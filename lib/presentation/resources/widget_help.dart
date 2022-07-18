@@ -60,7 +60,7 @@ class WidgetHelp {
       );
 
   // ------------- main body --------------
-  static Widget baseLoginBody(List<Widget> columnChildren, {required formKey}) {
+  static Widget baseLoginBody(List<Widget> columnChildren, {formKey}) {
     columnChildren.insert(0, Image.asset(ImageAssets.splashLogo));
     columnChildren.insert(1, box20());
     // blur image
@@ -99,8 +99,8 @@ class WidgetHelp {
       );
 
   // ----------- textLink ----------
-  static Widget textLink({VoidCallback? onPressed, String? txt}) =>
-      TextButton(onPressed: onPressed, child: Text(txt ?? ''));
+  static Widget textLink({VoidCallback? onPressed, String? txt, int? size}) =>
+      TextButton(onPressed: onPressed, child: Text(txt ?? ''),);
 
   // ------- button ----------
   static button({VoidCallback? onPressed, Widget? child}) => ElevatedButton(

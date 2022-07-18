@@ -7,16 +7,16 @@ import 'package:meshwary/app/functions/cubits/app/app_states.dart';
 
 class TempHome extends StatelessWidget {
   TempHome({Key? key}) : super(key: key);
-  late BuildContext context;
-  late AppCubit cubit;
+  late BuildContext _context;
+  late AppCubit _cubit;
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, state) {
-        context = context;
-        cubit = AppCubit.get(context);
+        _context = context;
+        _cubit = AppCubit.get(context);
         return myScaffold();
       },
     );

@@ -22,6 +22,7 @@ class StringsManager {
   static const String reSendCodeBT = "Didn’t receive email ? Resend";
   static const String gotoLoginBT = "Back to Login";
   static const String gotoLoginBT2 = "Already have an account ? Login";
+  static const String reSendSMSBT = "RESEND SMS";
 }
 
 

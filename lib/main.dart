@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:meshwary/app/functions/cubits/fireAuth.dart';
+import 'package:meshwary/app/functions/shared/cache_manager.dart';
 import 'package:meshwary/app/functions/shared/cache_helper.dart';
 import 'package:meshwary/app/services/background/test_serv.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,6 +19,8 @@ void main() async {
           await Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform,
           );
+          CacheGet.init();
+          FireAuth.init();
           runApp(MyApp());
     },
     blocObserver: MyBlocObserver(),

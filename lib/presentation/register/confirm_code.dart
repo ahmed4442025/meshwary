@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meshwary/app/functions/cubits/login/login_cubit.dart';
 import 'package:meshwary/app/functions/cubits/login/login_states.dart';
+import 'package:meshwary/app/functions/shared/cache_manager.dart';
 import 'package:meshwary/presentation/resources/image_assets.dart';
 import 'package:meshwary/presentation/resources/strings_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
@@ -47,13 +48,17 @@ class ConfirmCodeView extends StatelessWidget {
       // buttons
       registerBT(),
       WidgetHelp.box20(),
+      reSendCode(),
       backToLogin(),
       WidgetHelp.box20(),
     ];
   }
 
-  Widget registerBT() =>
-      WidgetHelp.button(onPressed: onConfirm, child: const Text(StringsManager.sendBT));
+  Widget registerBT() => WidgetHelp.button(
+      onPressed: onConfirm, child: const Text(StringsManager.sendBT));
+
+  Widget reSendCode() => WidgetHelp.textLink(
+      onPressed: _reSend, txt: StringsManager.reSendSMSBT);
 
   Widget backToLogin() => WidgetHelp.textLink(
       onPressed: gotoLoginView, txt: StringsManager.gotoLoginBT2);
@@ -63,27 +68,21 @@ class ConfirmCodeView extends StatelessWidget {
     Navigator.pushReplacementNamed(myContext, Routes.loginRout);
   }
 
+  void gotoHomeView() {
+    Navigator.pushReplacementNamed(myContext, Routes.mainRout);
+  }
+
   Future<void> onConfirm() async {
-    if (_formKey.currentState!.validate()) {
-      print('object2');
-      if (cubit.verificationId != null && codeCtrl.text.length == 6) {
-        // Create a PhoneAuthCredential with the code
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-            verificationId: cubit.verificationId ?? '', smsCode: codeCtrl.text);
-        // Sign the user in (or link) with the credential
-        UserCredential s = await cubit.auth.signInWithCredential(credential);
-        if (cubit.auth.currentUser != null) {
-          addInfoToUser();
-        }
-      }
+    if (_formKey.currentState!.validate() && codeCtrl.text.length == 6) {
+      print('sending');
+      await cubit.confirmCode(codeCtrl.text, gotoHomeView);
+      print('sended');
     }
   }
 
-  void addInfoToUser() {
-    if (cubit.auth.currentUser != null && cubit.userTemp != null) {
-      cubit.auth.currentUser!.updateDisplayName(cubit.userTemp!.userName);
-      cubit.auth.currentUser!.updateEmail(cubit.userTemp!.email ?? '');
-      cubit.auth.currentUser!.updatePassword(cubit.userTemp!.password ?? '123');
+  void _reSend() {
+    if (cubit.phoneNumber != null) {
+      cubit.sendCode(cubit.phoneNumber ?? '', cubit.izNewAcc, gotoHomeView);
     }
   }
 }
