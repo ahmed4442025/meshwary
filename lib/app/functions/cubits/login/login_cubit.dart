@@ -4,6 +4,8 @@ import 'package:meshwary/app/functions/cubits/fireAuth.dart';
 import 'package:meshwary/app/functions/cubits/login/login_states.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meshwary/data/models/user_model.dart';
+import 'package:meshwary/presentation/resources/strings_manager.dart';
+import 'package:meshwary/presentation/resources/widget_help.dart';
 
 import '../../shared/cache_manager.dart';
 
@@ -34,6 +36,7 @@ class LoginCubit extends Cubit<LoginStates> {
   String? phoneNumber;
   UserTempModel? userTemp;
   bool izNewAcc = false;
+
   // final FirebaseAuth auth = FirebaseAuth.instance;
 
   final FirebaseAuth auth = FireAuth.auth;
@@ -41,26 +44,36 @@ class LoginCubit extends Cubit<LoginStates> {
   // phone login
 
   // send Code to the phone and redirect to confirmCodeView
-  Future sendCode(String phone, bool newAcc,void Function() onSend) async {
+  Future sendCode(String phone, bool newAcc, void Function() onSend) async {
     phoneNumber = phone;
-    await auth.verifyPhoneNumber(
+    emit(LoginSendingCodeState());
+    await auth
+        .verifyPhoneNumber(
       timeout: const Duration(seconds: 60),
       phoneNumber: '+20$phoneNumber',
       verificationCompleted: (PhoneAuthCredential credential) {},
-      verificationFailed: (FirebaseAuthException e) {},
+      // verificationFailed
+      verificationFailed: (FirebaseAuthException e) {
+        emit(LoginSendErrorCodeState());
+        WidgetHelp.toastError(StringsManager.codeSendError + e.toString());
+      },
       // if send code
       codeSent: (String verificationId, int? resendToken) {
         _verificationId = verificationId;
         izNewAcc = newAcc;
+        WidgetHelp.toastOk(StringsManager.codeSendOk);
+        emit(LoginSendOkCodeState());
         onSend();
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+    )
+        .catchError((e) {
+          emit(LoginSendErrorCodeState());
+      WidgetHelp.toastError(StringsManager.codeSendError + e.toString());
+    });
   }
 
-
-
-  Future confirmCode(String code,void Function() onSend) async {
+  Future confirmCode(String code, void Function() onSend) async {
     if (_verificationId != null) {
       print('vir not null');
       // Create a PhoneAuthCredential with the code
@@ -75,11 +88,11 @@ class LoginCubit extends Cubit<LoginStates> {
     }
   }
 
-  void _addInfoToUser() {
-    if (auth.currentUser != null && userTemp != null && izNewAcc) {
-      auth.currentUser!.updateDisplayName(userTemp?.userName);
-    }
-  }
+  // void _addInfoToUser() {
+  //   if (auth.currentUser != null && userTemp != null && izNewAcc) {
+  //     auth.currentUser!.updateDisplayName(userTemp?.userName);
+  //   }
+  // }
 
   // cloud
   void createUserCloud(String uid) {

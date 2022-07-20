@@ -16,6 +16,7 @@ class LoginView extends StatelessWidget {
   // -------- vars -------
   late BuildContext myContext;
   late LoginCubit cubit;
+  late LoginStates myState;
   final _formKey = GlobalKey<FormState>();
 
   // -------- Text controllers --------
@@ -29,10 +30,13 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (BuildContext context, state) {},
+      listener: (BuildContext context, state) {
+        myState = state;
+      },
       builder: (BuildContext context, state) {
         myContext = context;
         cubit = LoginCubit.get(context);
+        myState = state;
         return myScaffold();
       },
     );
@@ -65,7 +69,8 @@ class LoginView extends StatelessWidget {
 
   // login button
   Widget loginBT() => WidgetHelp.button(
-      onPressed: onLogin, child: const Text(StringsManager.loginBT));
+      onPressed: (myState is LoginSendingCodeState) ? null : onLogin,
+      child: const Text(StringsManager.loginBT));
 
   // link to register and forget password views
   Widget registerText() => Row(
@@ -78,8 +83,6 @@ class LoginView extends StatelessWidget {
               onPressed: gotoRegisterView, txt: StringsManager.gotoSignUpBT),
         ],
       );
-
-
 
   // ---------- voids ---------
   // open register view
@@ -102,12 +105,9 @@ class LoginView extends StatelessWidget {
     if (_formKey.currentState!.validate() && userNameCtrl.text.length == 11) {
       await cubit.sendCode(userNameCtrl.text, false, gotoConfirmView);
     }
-
   }
 
   void _setLoginCache() {
     CacheGet.setLoginFields(userNameCtrl.text, 'passwordCtrl.text');
   }
-
-
 }

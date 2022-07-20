@@ -4,3 +4,8 @@ class LoginInitialState extends LoginStates {}
 
 class LoginChangeBgState extends LoginStates {}
 
+// -------- send code --------
+class LoginSendingCodeState extends LoginStates {}
+class LoginSendOkCodeState extends LoginStates {}
+class LoginSendErrorCodeState extends LoginStates {}
+

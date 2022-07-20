@@ -23,6 +23,9 @@ class StringsManager {
   static const String gotoLoginBT = "Back to Login";
   static const String gotoLoginBT2 = "Already have an account ? Login";
   static const String reSendSMSBT = "RESEND SMS";
+  // toasts
+  static const String codeSendOk = "successfully sent code";
+  static const String codeSendError = "can't send code : ";
 }
 
 

@@ -16,5 +16,8 @@ class ColorManager {
   static Color grey2 = const Color(0xff797979);
   static Color white = const Color(0xffFFFFFF);
   static Color error = const Color(0xffe61f34);
+  static Color toastError = const Color(0xFFE82572);
+  static Color toastOk = const Color(0xff00ff00);
+  static Color toastWhite = const Color(0xffffffff);
 
 }
