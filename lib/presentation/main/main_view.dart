@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meshwary/app/functions/cubits/app/app_cubit.dart';
 import 'package:meshwary/app/functions/cubits/app/app_states.dart';
-import 'package:meshwary/app/functions/shared/cache_manager.dart';
+import 'package:meshwary/presentation/resources/views_sort_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
-import '../resources/routes_maneger.dart';
 import 'package:meshwary/app/functions/cubits/fireAuth.dart';
 
 class MainView extends StatelessWidget {
@@ -44,13 +43,11 @@ class MainView extends StatelessWidget {
 
   // --------- void ----------
   _logOut() {
-    if(FireAuth.auth.currentUser != null){
+    if (FireAuth.auth.currentUser != null) {
       FireAuth.auth.signOut();
     }
     _goToLogin();
   }
 
-  _goToLogin(){
-    Navigator.pushReplacementNamed(_context, Routes.loginRout);
-  }
+  _goToLogin() => ViewsManager.openLoginView(_context);
 }

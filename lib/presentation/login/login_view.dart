@@ -1,15 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meshwary/app/functions/cubits/fireAuth.dart';
 import 'package:meshwary/app/functions/cubits/login/login_cubit.dart';
 import 'package:meshwary/app/functions/cubits/login/login_states.dart';
 import 'package:meshwary/app/functions/shared/cache_manager.dart';
-import 'package:meshwary/data/models/user_model.dart';
-import 'package:meshwary/presentation/resources/image_assets.dart';
 import 'package:meshwary/presentation/resources/strings_manager.dart';
+import 'package:meshwary/presentation/resources/views_sort_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../resources/routes_maneger.dart';
 
 class LoginView extends StatelessWidget {
@@ -69,7 +65,8 @@ class LoginView extends StatelessWidget {
 
   // login button
   Widget loginBT() => WidgetHelp.button(
-      onPressed: (myState is LoginSendingCodeState) ? null : onLogin,
+      onPressed: onLogin,
+      disable: isActiveLoginBT(),
       child: const Text(StringsManager.loginBT));
 
   // link to register and forget password views
@@ -86,19 +83,13 @@ class LoginView extends StatelessWidget {
 
   // ---------- voids ---------
   // open register view
-  void gotoRegisterView() {
-    Navigator.pushReplacementNamed(myContext, Routes.registerRout);
-  }
+  void gotoRegisterView() => ViewsManager.openRegisterView(myContext);
 
   // open forget password view
-  void gotoForgetPassView() {
-    Navigator.pushReplacementNamed(myContext, Routes.forgotPasswordRout);
-  }
+  void gotoForgetPassView() => ViewsManager.openForgetPassView(myContext);
 
   // open confirm code
-  void gotoConfirmView() {
-    Navigator.pushReplacementNamed(myContext, Routes.confirmPhoneRout);
-  }
+  void gotoConfirmView() => ViewsManager.openConfirmCodeView(myContext);
 
   Future<void> onLogin() async {
     _setLoginCache();
@@ -106,6 +97,8 @@ class LoginView extends StatelessWidget {
       await cubit.sendCode(userNameCtrl.text, false, gotoConfirmView);
     }
   }
+
+  bool isActiveLoginBT() => (myState is LoginSendingCodeState);
 
   void _setLoginCache() {
     CacheGet.setLoginFields(userNameCtrl.text, 'passwordCtrl.text');

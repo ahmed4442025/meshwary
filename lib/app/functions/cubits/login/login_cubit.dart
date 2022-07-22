@@ -74,8 +74,8 @@ class LoginCubit extends Cubit<LoginStates> {
   }
 
   Future confirmCode(String code, void Function() onSend) async {
-    if (_verificationId != null) {
-      print('vir not null');
+    emit(LoginConfirmingCodeState());
+    try{if (_verificationId != null) {
       // Create a PhoneAuthCredential with the code
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: _verificationId ?? '', smsCode: code);
@@ -83,9 +83,14 @@ class LoginCubit extends Cubit<LoginStates> {
       await auth.signInWithCredential(credential);
       if (auth.currentUser != null) {
         createUserCloud(auth.currentUser?.uid ?? 'null');
+        emit(LoginConfirmOkCodeState());
         onSend();
       }
+    }} catch(e){
+      WidgetHelp.toastError(StringsManager.error + e.toString());
+      emit(LoginConfirmOkCodeState());
     }
+
   }
 
   // void _addInfoToUser() {

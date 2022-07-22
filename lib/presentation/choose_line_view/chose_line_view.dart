@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meshwary/app/functions/cubits/app/app_cubit.dart';
 import 'package:meshwary/app/functions/cubits/app/app_states.dart';
 import 'package:meshwary/presentation/resources/routes_maneger.dart';
+import 'package:meshwary/presentation/resources/views_sort_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
 
 class ChoseLineView extends StatelessWidget {
@@ -65,9 +66,5 @@ class ChoseLineView extends StatelessWidget {
         ),
       ));
 
-
-
-  void _gotoMainView(){
-    Navigator.pushReplacementNamed(_context, Routes.mainRout);
-  }
+  void _gotoMainView() => ViewsManager.openHomeView(_context);
 }

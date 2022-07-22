@@ -100,11 +100,16 @@ class WidgetHelp {
 
   // ----------- textLink ----------
   static Widget textLink({VoidCallback? onPressed, String? txt, int? size}) =>
-      TextButton(onPressed: onPressed, child: Text(txt ?? ''),);
+      TextButton(
+        onPressed: onPressed,
+        child: Text(txt ?? ''),
+      );
 
   // ------- button ----------
-  static button({VoidCallback? onPressed, Widget? child}) => ElevatedButton(
-        onPressed: onPressed,
+  static button(
+          {VoidCallback? onPressed, Widget? child, bool disable = false}) =>
+      ElevatedButton(
+        onPressed: disable ? null : onPressed,
         child: child,
       );
 
@@ -114,14 +119,11 @@ class WidgetHelp {
   static Widget box15() => const SizedBox(height: 15);
 
   // toast
-  static void toastError(String msg){
+  static void toastError(String msg) {
     ToastManager.toastError(msg);
   }
-  static void toastOk(String msg){
+
+  static void toastOk(String msg) {
     ToastManager.toastOk(msg);
   }
-
-
 }
-
-

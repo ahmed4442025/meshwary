@@ -4,6 +4,7 @@ import 'package:meshwary/app/functions/cubits/login/login_cubit.dart';
 import 'package:meshwary/app/functions/cubits/login/login_states.dart';
 import 'package:meshwary/presentation/resources/image_assets.dart';
 import 'package:meshwary/presentation/resources/strings_manager.dart';
+import 'package:meshwary/presentation/resources/views_sort_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
 
 import '../resources/routes_maneger.dart';
@@ -58,20 +59,16 @@ class ForgetPassView extends StatelessWidget {
   Widget registerBT() => WidgetHelp.button(
       onPressed: onForget, child: const Text(StringsManager.resetPassBT));
 
-  Widget resendCode() => WidgetHelp.textLink(
-      onPressed: () {}, txt: StringsManager.reSendCodeBT);
+  Widget resendCode() =>
+      WidgetHelp.textLink(onPressed: () {}, txt: StringsManager.reSendCodeBT);
 
-  Widget backToLogin() =>
-      WidgetHelp.textLink(onPressed: gotoLoginPassView, txt: StringsManager.gotoLoginBT);
+  Widget backToLogin() => WidgetHelp.textLink(
+      onPressed: gotoLoginPassView, txt: StringsManager.gotoLoginBT);
 
   // --------- void ----------
-  void gotoForgetPassView() {
-    Navigator.pushReplacementNamed(myContext, Routes.forgotPasswordRout);
-  }
+  void gotoForgetPassView() => ViewsManager.openForgetPassView(myContext);
 
-  void gotoLoginPassView() {
-    Navigator.pushReplacementNamed(myContext, Routes.loginRout);
-  }
+  void gotoLoginPassView() => ViewsManager.openLoginView(myContext);
 
   void onForget() {
     if (_formKey.currentState!.validate()) {

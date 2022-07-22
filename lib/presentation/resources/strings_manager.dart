@@ -26,6 +26,7 @@ class StringsManager {
   // toasts
   static const String codeSendOk = "successfully sent code";
   static const String codeSendError = "can't send code : ";
+  static const String error = "Error : ";
 }
 
 

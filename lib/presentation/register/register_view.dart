@@ -4,10 +4,9 @@ import 'package:meshwary/app/functions/cubits/login/login_cubit.dart';
 import 'package:meshwary/app/functions/cubits/login/login_states.dart';
 import 'package:meshwary/app/functions/shared/cache_manager.dart';
 import 'package:meshwary/data/models/user_model.dart';
-import 'package:meshwary/presentation/resources/image_assets.dart';
 import 'package:meshwary/presentation/resources/strings_manager.dart';
+import 'package:meshwary/presentation/resources/views_sort_manager.dart';
 import 'package:meshwary/presentation/resources/widget_help.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../resources/routes_maneger.dart';
 
@@ -15,11 +14,15 @@ class RegisterView extends StatelessWidget {
   // -------- vars -------
   late BuildContext myContext;
   late LoginCubit cubit;
+  late LoginStates myState;
   final _formKey = GlobalKey<FormState>();
 
   // -------- Text controllers --------
-  TextEditingController nameCtrl = TextEditingController(text: CacheGet.registerName);
-  TextEditingController phoneCtrl = TextEditingController(text: CacheGet.registerPhone);
+  TextEditingController nameCtrl =
+      TextEditingController(text: CacheGet.registerName);
+  TextEditingController phoneCtrl =
+      TextEditingController(text: CacheGet.registerPhone);
+
   // TextEditingController emailCtrl = TextEditingController(text: CacheGet.registerEmail);
   // TextEditingController passwordCtrl = TextEditingController(text: CacheGet.registerPass);
   // TextEditingController password2Ctrl = TextEditingController(text: CacheGet.registerPass);
@@ -27,10 +30,13 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (BuildContext context, state) {},
+      listener: (BuildContext context, state) {
+        myState = state;
+      },
       builder: (BuildContext context, state) {
         myContext = context;
         cubit = LoginCubit.get(context);
+        myState = state;
         return myScaffold();
       },
     );
@@ -71,35 +77,33 @@ class RegisterView extends StatelessWidget {
   }
 
   Widget registerBT() => WidgetHelp.button(
-      onPressed: onRegister, child: const Text(StringsManager.registerBT));
+      onPressed: onRegister,
+      disable: isActiveLoginBT(),
+      child: const Text(StringsManager.registerBT));
 
   Widget backToLogin() => WidgetHelp.textLink(
       onPressed: gotoLoginView, txt: StringsManager.gotoLoginBT2);
 
   // ------- void --------
-  void gotoLoginView() {
-    Navigator.pushReplacementNamed(myContext, Routes.loginRout);
-  }
+  void gotoLoginView() => ViewsManager.openLoginView(myContext);
 
-  void gotoConfirmView() {
-    Navigator.pushReplacementNamed(myContext, Routes.confirmPhoneRout);
-  }
+  void gotoConfirmView() => ViewsManager.openConfirmCodeView(myContext);
 
   Future<void> onRegister() async {
     // cache last data usage
     _setRegisterCache();
     // all fields not empty
     if (_formKey.currentState!.validate() && phoneCtrl.text.length == 11) {
-      cubit.userTemp =
-          UserTempModel(nameCtrl.text, phoneCtrl.text);
+      cubit.userTemp = UserTempModel(nameCtrl.text, phoneCtrl.text);
       // send Code to the phone and redirect to confirmCodeView
       await cubit.sendCode(phoneCtrl.text, true, gotoConfirmView);
     }
   }
 
-  void _setRegisterCache() {
-    CacheGet.setRegisterFields(
-        nameCtrl.text, phoneCtrl.text, 'emailCtrl.text', 'passwordCtrl.text', 'NOT YET !');
-  }
+  bool isActiveLoginBT() => (myState is LoginSendingCodeState);
 
+  void _setRegisterCache() {
+    CacheGet.setRegisterFields(nameCtrl.text, phoneCtrl.text, 'emailCtrl.text',
+        'passwordCtrl.text', 'NOT YET !');
+  }
 }
